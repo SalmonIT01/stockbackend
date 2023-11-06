@@ -1,4 +1,5 @@
 import sqlite3
+from tabulate import tabulate
 
 con = sqlite3.connect('stockdb.db')
 cursur = con.cursor()
@@ -29,18 +30,23 @@ def search():
         search_sql = '''SELECT * FROM products2
         WHERE product_name LIKE "%{0}%" '''.format(user_input)
         
-    print(search_sql)
-
     cursur.execute(search_sql)
     result = cursur.fetchall()
-    print(result)
+    table(result)
    
 def showdb():
     db = '''SELECT * 
             FROM products2; '''
     cursur.execute(db)
-    product_table = cursur.fetchall()
-    print(product_table)
+    data = cursur.fetchall()
+    header = ['id','product_id','name','unit_id','amount','status']
+    print(tabulate(data,header))
+    
+def table(data_table):
+    data = data_table
+    header = ['id','product_id','name','unit_id','amount','status']
+    print(tabulate(data,header))
+
 
 def updatedb():
     search()
